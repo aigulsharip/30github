@@ -34,6 +34,29 @@ class Solution {
         return false;
     }
 }
+
+# Reverse integer
+class Solution {
+    public int reverse(int x) {
+        int remainder;
+        long reversedInt = 0;
+        while (x != 0) {
+            remainder = x % 10;
+            reversedInt = reversedInt * 10 + remainder;
+
+            x = x / 10;
+        }
+        if (reversedInt < Integer.MIN_VALUE || reversedInt > Integer.MAX_VALUE) {
+            return 0;
+        }
+        else {
+            return (int) reversedInt;
+        }
+        
+    }
+}
+
+
 #Add Two Numbers
 public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode sentinel = new ListNode(0);
