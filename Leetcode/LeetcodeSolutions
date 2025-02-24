@@ -34,6 +34,28 @@ class Solution {
         return false;
     }
 }
+
+class Solution {
+    List<List<Integer>> results = new ArrayList<>();
+    public List<List<Integer>> permute(int[] nums) {
+        backtrack(nums, new ArrayList<>());
+        return results;
+    }
+
+    public void backtrack(int [] nums, List<Integer> permutations) {
+        if (permutations.size() == nums.length) {
+            results.add(new ArrayList<>(permutations));
+            return;
+        }
+
+        for (int num: nums) {
+            if (permutations.contains(num)) continue;
+            permutations.add(num);
+            backtrack(nums, permutations);
+            permutations.remove(permutations.size()-1);
+        }
+    }
+}
 #Remove Element
 class Solution {
     public int removeElement(int[] nums, int val) {
