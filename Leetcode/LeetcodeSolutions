@@ -56,6 +56,31 @@ class Solution {
         }
     }
 }
+
+class Solution {
+    List<String> res = new ArrayList<>();
+    public List<String> generateParenthesis(int n) {
+        backtract(new StringBuilder(), 0, 0, n);
+        return res;
+    }
+
+    public void backtract (StringBuilder sb, int leftCount, int rightCount, int n) {
+        if (sb.length() == n*2) {
+            res.add(sb.toString());
+        }
+
+        if (leftCount < n) {
+            sb.append("(");
+            backtract (sb, leftCount +1, rightCount, n);
+            sb.deleteCharAt(sb.length()-1);
+        }
+        if (rightCount < leftCount ) {
+            sb.append(")");
+            backtract(sb, leftCount, rightCount + 1, n );
+            sb.deleteCharAt(sb.length()-1);
+        }
+    }
+}
 #Remove Element
 class Solution {
     public int removeElement(int[] nums, int val) {
