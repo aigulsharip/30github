@@ -58,6 +58,29 @@ class Solution {
 }
 
 class Solution {
+    List<List<Integer>> results = new ArrayList<>();
+
+    public List<List<Integer>> combinationSum(int[] nums, int target) {
+        backtract(nums, new ArrayList<>(), target, 0, 0);
+        return results;    
+    }
+
+    public void backtract (int [] nums, List<Integer> combs, int target, int startIndex, int sum) {
+        if (sum > target) return;
+        if (sum == target) {
+            results.add(new ArrayList<>(combs));
+            return;
+        }
+
+        for (int i = startIndex; i < nums.length; i++) {
+            combs.add(nums[i]);
+            backtract(nums, combs, target, i, sum + nums[i]);
+            combs.remove(combs.size()-1);
+        }
+    }
+}
+
+class Solution {
     List<String> res = new ArrayList<>();
     public List<String> generateParenthesis(int n) {
         backtract(new StringBuilder(), 0, 0, n);
