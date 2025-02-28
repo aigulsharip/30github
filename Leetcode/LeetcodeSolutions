@@ -36,6 +36,26 @@ class Solution {
 }
 
 class Solution {
+    public boolean isPalindrome(int x) {
+        
+         if (x < 0) return false;
+
+        int initValue = x;
+        int reverseValue = 0;
+
+        while (x> 0) {
+            reverseValue = reverseValue * 10;
+            reverseValue = reverseValue + x % 10;
+            x /= 10;
+        }
+
+        if (initValue == reverseValue) return true;
+        return false;
+        
+    }
+}
+
+class Solution {
     List<List<Integer>> results = new ArrayList<>();
     public List<List<Integer>> permute(int[] nums) {
         backtrack(nums, new ArrayList<>());
