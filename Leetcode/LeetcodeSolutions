@@ -56,6 +56,26 @@ class Solution {
 }
 
 class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        Set<String> seen = new HashSet<>();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                char num = board[i][j];
+                if (num != '.') {
+                    if (!seen.add(num  + "in row " + i) || 
+                        !seen.add(num  + "in col " + j) ||
+                        !seen.add(num  + "in subbox " + i/3 + "-" + j/3)) {
+                            return false;
+                        }
+                }
+            }
+        }
+        return true;
+    }
+   
+}
+
+class Solution {
     List<List<Integer>> results = new ArrayList<>();
     public List<List<Integer>> permute(int[] nums) {
         backtrack(nums, new ArrayList<>());
