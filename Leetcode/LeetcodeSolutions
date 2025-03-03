@@ -35,6 +35,37 @@ class Solution {
     }
 }
 
+# Group Anagrams
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+
+        for (String word: strs) {
+            // sort the str and use it as a key
+            char [] wordArray = word.toCharArray();
+            Arrays.sort(wordArray);
+            String key = new String(wordArray);
+            // if map doesn't contain sorted array, create key-val pair and add it there
+            if (!map.containsKey(key)) {
+                List<String> ana = new ArrayList<>();
+                ana.add(word);
+                map.put(key, ana);
+            }
+            // if map contains this key already, get this lits and add new element, and add list back
+            else {
+                List<String> existing = map.get(key);
+                existing.add(word);
+                map.put(key,existing);
+            }
+        }
+        //make the list out of value list of map
+        return new ArrayList<>(map.values());
+            
+
+
+    }
+}
+
 class Solution {
     public int[][] merge(int[][] intervals) {
         Arrays.sort (intervals, (a, b) -> Integer.compare(a[0], b[0]));
