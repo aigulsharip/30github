@@ -1,114 +1,86 @@
 #Word Search
-class Solution {
-    public boolean exist(char[][] board, String word) {
-        int rows = board.length;
-        int cols = board[0].length;
-        boolean [][] visited = new boolean [rows][cols];
+public boolean exist(char[][] board, String word) {
+    int rows = board.length;
+    int cols = board[0].length;
+    boolean [][] visited = new boolean [rows][cols];
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (board[i][j] == word.charAt(0) && searchWord (board, word, i, j, 0, visited)) {
-                    return true;
-                }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (board[i][j] == word.charAt(0) && searchWord (board, word, i, j, 0, visited)) {
+                return true;
             }
         }
-        return false;
     }
+    return false;
+}
 
-    public boolean searchWord(char [][] board, String word, int i, int j, int count, boolean [][] visited) {
-        if (count == word.length()) return true;
-        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length 
-            || board[i][j] != word.charAt(count) || visited[i][j]) {
-                return false;
-            }
-        visited[i][j] = true;
+public boolean searchWord(char [][] board, String word, int i, int j, int count, boolean [][] visited) {
+    if (count == word.length()) return true;
+    if (i < 0 || i >= board.length || j < 0 || j >= board[0].length 
+        || board[i][j] != word.charAt(count) || visited[i][j]) {
+            return false;
+        }
+    visited[i][j] = true;
 
-        if (
-            searchWord (board, word, i + 1, j, count + 1, visited)
-            || searchWord (board, word, i - 1, j, count + 1, visited)
-            || searchWord (board, word, i, j +1, count + 1, visited)
-            || searchWord (board, word, i, j -1, count + 1, visited)
-        ) return true;
+    if (
+        searchWord (board, word, i + 1, j, count + 1, visited)
+        || searchWord (board, word, i - 1, j, count + 1, visited)
+        || searchWord (board, word, i, j +1, count + 1, visited)
+        || searchWord (board, word, i, j -1, count + 1, visited)
+    ) return true;
 
-        visited[i][j] = false;
-        return false;
-    }
+    visited[i][j] = false;
+    return false;
 }
 
 #Remove Element
-class Solution {
-    public int removeElement(int[] nums, int val) {
-        int k = 0;
-        int n = nums.length;
-        for (int i = 0; i< n; i++) {
-            if (nums[i] != val) {
-                nums[k++] = nums[i];
-            }
-        }
-        return k;
-        
-        
-       
-    }
-    
-    /*
-    int reader = 0;
-    int writer = 0;
-
-    while(reader < nums.length) {
-        if (nums[reader] == val) {
-            reader++;
-        }
-        else {
-            nums[writer] = nums[reader];
-            reader++;
-            writer++;
-
+public int removeElement(int[] nums, int val) {
+    int k = 0;
+    int n = nums.length;
+    for (int i = 0; i< n; i++) {
+        if (nums[i] != val) {
+            nums[k++] = nums[i];
         }
     }
-    
-    */
-    
-    
+    return k;
 }
 
-# Group Anagrams
-class Solution {
-    public List<List<String>> groupAnagrams(String[] strs) {
-        Map<String, List<String>> map = new HashMap<>();
 
-        for (String word: strs) {
-            // sort the str and use it as a key
-            char [] wordArray = word.toCharArray();
-            Arrays.sort(wordArray);
-            String key = new String(wordArray);
-            // if map doesn't contain sorted array, create key-val pair and add it there
-            if (!map.containsKey(key)) {
-                List<String> ana = new ArrayList<>();
-                ana.add(word);
-                map.put(key, ana);
-            }
-            // if map contains this key already, get this lits and add new element, and add list back
-            else {
-                List<String> existing = map.get(key);
-                existing.add(word);
-                map.put(key,existing);
-            }
+# Group Anagrams
+public List<List<String>> groupAnagrams(String[] strs) {
+    Map<String, List<String>> map = new HashMap<>();
+
+    for (String word: strs) {
+        // sort the str and use it as a key
+        char [] wordArray = word.toCharArray();
+        Arrays.sort(wordArray);
+        String key = new String(wordArray);
+        // if map doesn't contain sorted array, create key-val pair and add it there
+        if (!map.containsKey(key)) {
+            List<String> ana = new ArrayList<>();
+            ana.add(word);
+            map.put(key, ana);
         }
-        //make the list out of value list of map
-        return new ArrayList<>(map.values());
-        
+        // if map contains this key already, get this lits and add new element, and add list back
+        else {
+            List<String> existing = map.get(key);
+            existing.add(word);
+            map.put(key,existing);
+        }
+    }
+    
+    return new ArrayList<>(map.values());
+} 
         
 
 # Set matrix zeroes
-    public void setZeroes(int[][] matrix) {
-
+public void setZeroes(int[][] matrix) {
     int m = matrix.length;
     int n = matrix[0].length;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
     Set<Integer> row = new HashSet<>();
     Set<Integer> col = new HashSet<>();
-
+    
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             if (matrix[i][j] == 0) {
@@ -117,7 +89,7 @@ class Solution {
             }
         }
     }
-
+    
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             if (row.contains(i) || col.contains(j)) {
@@ -125,59 +97,55 @@ class Solution {
             }
         }
     }
-    }     
-    
+}     
 
-
-class Solution {
-    public int[][] merge(int[][] intervals) {
-        Arrays.sort (intervals, (a, b) -> Integer.compare(a[0], b[0]));
-        LinkedList<int []>  merged = new LinkedList<>();
-        for (int [] interval : intervals) {
-            if (merged.isEmpty() || merged.getLast()[1] < interval[0]) {
-                merged.add(interval);
-            } else {
-                merged.getLast()[1] = Math.max(interval[1], merged.getLast()[1]);
-            } 
-        }
-
-        return merged.toArray(new int[merged.size()][]);
+public int[][] merge(int[][] intervals) {
+    Arrays.sort (intervals, (a, b) -> Integer.compare(a[0], b[0]));
+    LinkedList<int []>  merged = new LinkedList<>();
+    for (int [] interval : intervals) {
+        if (merged.isEmpty() || merged.getLast()[1] < interval[0]) {
+            merged.add(interval);
+        } else {
+            merged.getLast()[1] = Math.max(interval[1], merged.getLast()[1]);
+        } 
     }
+
+    return merged.toArray(new int[merged.size()][]);
 }
 
-class Solution {
-    public List<Integer> spiralOrder(int[][] matrix) {
-        int top = 0;
-        int bottom = matrix.length-1;
-        int left = 0;
-        int right = matrix[0].length-1;
-        int size = matrix.length * matrix[0].length;
-        List<Integer> nums = new ArrayList<>();
 
-        while (nums.size() < size) {
-            for (int i = left; i <= right && nums.size() < size; i++) {
-                nums.add(matrix[top][i]);
-            }
-            top++;
+public List<Integer> spiralOrder(int[][] matrix) {
+    int top = 0;
+    int bottom = matrix.length-1;
+    int left = 0;
+    int right = matrix[0].length-1;
+    int size = matrix.length * matrix[0].length;
+    List<Integer> nums = new ArrayList<>();
 
-            for (int i = top; i <= bottom && nums.size() < size; i++) {
-                nums.add(matrix[i][right]);
-            }
-            right--;
-
-            for (int i = right; i >= left && nums.size() < size; i--) {
-                nums.add(matrix[bottom][i]);
-            }
-            bottom--;
-
-            for (int i = bottom; i >= top && nums.size() < size; i--) {
-                nums.add(matrix[i][left]);
-            }
-            left++;
+    while (nums.size() < size) {
+        for (int i = left; i <= right && nums.size() < size; i++) {
+            nums.add(matrix[top][i]);
         }
-        return nums;
+        top++;
+
+        for (int i = top; i <= bottom && nums.size() < size; i++) {
+            nums.add(matrix[i][right]);
+        }
+        right--;
+
+        for (int i = right; i >= left && nums.size() < size; i--) {
+            nums.add(matrix[bottom][i]);
+        }
+        bottom--;
+
+        for (int i = bottom; i >= top && nums.size() < size; i--) {
+            nums.add(matrix[i][left]);
+        }
+        left++;
     }
+    return nums;
 }
+
 
 class Solution {
     public boolean isPalindrome(int x) {
