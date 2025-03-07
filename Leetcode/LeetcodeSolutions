@@ -99,6 +99,7 @@ public void setZeroes(int[][] matrix) {
     }
 }     
 
+#Merge Intervals
 public int[][] merge(int[][] intervals) {
     Arrays.sort (intervals, (a, b) -> Integer.compare(a[0], b[0]));
     LinkedList<int []>  merged = new LinkedList<>();
@@ -113,7 +114,7 @@ public int[][] merge(int[][] intervals) {
     return merged.toArray(new int[merged.size()][]);
 }
 
-
+#Spiral Matrix
 public List<Integer> spiralOrder(int[][] matrix) {
     int top = 0;
     int bottom = matrix.length-1;
@@ -146,264 +147,205 @@ public List<Integer> spiralOrder(int[][] matrix) {
     return nums;
 }
 
+#Valid Palindrome
+public boolean isPalindrome(int x) {
+    
+     if (x < 0) return false;
 
-class Solution {
-    public boolean isPalindrome(int x) {
-        
-         if (x < 0) return false;
+    int initValue = x;
+    int reverseValue = 0;
 
-        int initValue = x;
-        int reverseValue = 0;
-
-        while (x> 0) {
-            reverseValue = reverseValue * 10;
-            reverseValue = reverseValue + x % 10;
-            x /= 10;
-        }
-
-        if (initValue == reverseValue) return true;
-        return false;
-        
+    while (x> 0) {
+        reverseValue = reverseValue * 10;
+        reverseValue = reverseValue + x % 10;
+        x /= 10;
     }
+
+    if (initValue == reverseValue) return true;
+    return false;
+    
 }
 
-class Solution {
-    public boolean isValidSudoku(char[][] board) {
-        Set<String> seen = new HashSet<>();
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                char num = board[i][j];
-                if (num != '.') {
-                    if (!seen.add(num  + "in row " + i) || 
-                        !seen.add(num  + "in col " + j) ||
-                        !seen.add(num  + "in subbox " + i/3 + "-" + j/3)) {
-                            return false;
-                        }
-                }
+#Valid Sudoku
+public boolean isValidSudoku(char[][] board) {
+    Set<String> seen = new HashSet<>();
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            char num = board[i][j];
+            if (num != '.') {
+                if (!seen.add(num  + "in row " + i) || 
+                    !seen.add(num  + "in col " + j) ||
+                    !seen.add(num  + "in subbox " + i/3 + "-" + j/3)) {
+                        return false;
+                    }
             }
         }
-        return true;
     }
+    return true;
+}
    
+#Permutations
+List<List<Integer>> results = new ArrayList<>();
+public List<List<Integer>> permute(int[] nums) {
+    backtrack(nums, new ArrayList<>());
+    return results;
 }
 
-class Solution {
-    List<List<Integer>> results = new ArrayList<>();
-    public List<List<Integer>> permute(int[] nums) {
-        backtrack(nums, new ArrayList<>());
-        return results;
+public void backtrack(int [] nums, List<Integer> permutations) {
+    if (permutations.size() == nums.length) {
+        results.add(new ArrayList<>(permutations));
+        return;
     }
 
-    public void backtrack(int [] nums, List<Integer> permutations) {
-        if (permutations.size() == nums.length) {
-            results.add(new ArrayList<>(permutations));
-            return;
-        }
-
-        for (int num: nums) {
-            if (permutations.contains(num)) continue;
-            permutations.add(num);
-            backtrack(nums, permutations);
-            permutations.remove(permutations.size()-1);
-        }
+    for (int num: nums) {
+        if (permutations.contains(num)) continue;
+        permutations.add(num);
+        backtrack(nums, permutations);
+        permutations.remove(permutations.size()-1);
     }
 }
 
-class Solution {
-    List<List<Integer>> results = new ArrayList<>();
+#Combinations Sum
+List<List<Integer>> results = new ArrayList<>();
 
-    public List<List<Integer>> combinationSum(int[] nums, int target) {
-        backtract(nums, new ArrayList<>(), target, 0, 0);
-        return results;    
+public List<List<Integer>> combinationSum(int[] nums, int target) {
+    backtract(nums, new ArrayList<>(), target, 0, 0);
+    return results;    
+}
+
+public void backtract (int [] nums, List<Integer> combs, int target, int startIndex, int sum) {
+    if (sum > target) return;
+    if (sum == target) {
+        results.add(new ArrayList<>(combs));
+        return;
     }
 
-    public void backtract (int [] nums, List<Integer> combs, int target, int startIndex, int sum) {
-        if (sum > target) return;
-        if (sum == target) {
-            results.add(new ArrayList<>(combs));
-            return;
-        }
-
-        for (int i = startIndex; i < nums.length; i++) {
-            combs.add(nums[i]);
-            backtract(nums, combs, target, i, sum + nums[i]);
-            combs.remove(combs.size()-1);
-        }
+    for (int i = startIndex; i < nums.length; i++) {
+        combs.add(nums[i]);
+        backtract(nums, combs, target, i, sum + nums[i]);
+        combs.remove(combs.size()-1);
     }
 }
 
-class Solution {
-    List<String> res = new ArrayList<>();
-    public List<String> generateParenthesis(int n) {
-        backtract(new StringBuilder(), 0, 0, n);
-        return res;
+#Generate Parenthesis
+List<String> res = new ArrayList<>();
+public List<String> generateParenthesis(int n) {
+    backtract(new StringBuilder(), 0, 0, n);
+    return res;
+}
+
+public void backtract (StringBuilder sb, int leftCount, int rightCount, int n) {
+    if (sb.length() == n*2) {
+        res.add(sb.toString());
     }
 
-    public void backtract (StringBuilder sb, int leftCount, int rightCount, int n) {
-        if (sb.length() == n*2) {
-            res.add(sb.toString());
-        }
-
-        if (leftCount < n) {
-            sb.append("(");
-            backtract (sb, leftCount +1, rightCount, n);
-            sb.deleteCharAt(sb.length()-1);
-        }
-        if (rightCount < leftCount ) {
-            sb.append(")");
-            backtract(sb, leftCount, rightCount + 1, n );
-            sb.deleteCharAt(sb.length()-1);
-        }
+    if (leftCount < n) {
+        sb.append("(");
+        backtract (sb, leftCount +1, rightCount, n);
+        sb.deleteCharAt(sb.length()-1);
+    }
+    if (rightCount < leftCount ) {
+        sb.append(")");
+        backtract(sb, leftCount, rightCount + 1, n );
+        sb.deleteCharAt(sb.length()-1);
     }
 }
 
-class Solution {
-    public int uniquePaths(int n, int m) {
-        int [][] dp = new int [n+1][m+1];
-        
-        // filling first row 
-        for (int i = 0; i < n; i++) {
-            dp[i][0] = 1;
-        }
-        
-        // filling first row 
-        for (int j = 0; j < m; j++) {
-            dp[0][j] = 1;
-        } 
-        
-        // computing other rows
-        for (int i = 1; i < n; i++) {
-            for (int j = 1; j < m; j++) {
-                dp[i][j] = dp[i-1][j] + dp[i][j-1];
-            }
-        }
-        
-        return dp[n-1][m-1];
+#Unique Paths
+public int uniquePaths(int n, int m) {
+    int [][] dp = new int [n+1][m+1];
+    
+    // filling first row 
+    for (int i = 0; i < n; i++) {
+        dp[i][0] = 1;
     }
+    
+    // filling first row 
+    for (int j = 0; j < m; j++) {
+        dp[0][j] = 1;
+    } 
+    
+    // computing other rows
+    for (int i = 1; i < n; i++) {
+        for (int j = 1; j < m; j++) {
+            dp[i][j] = dp[i-1][j] + dp[i][j-1];
+        }
+    }
+    
+    return dp[n-1][m-1];
 }
 
 #Remove Element
-class Solution {
-    public int removeElement(int[] nums, int val) {
-        int k = 0;
-        int n = nums.length;
-        for (int i = 0; i< n; i++) {
-            if (nums[i] != val) {
-                nums[k++] = nums[i];
-            }
-        }
-        return k;
-        
-        
-       
-    }
-    
-    /*
-    int reader = 0;
-    int writer = 0;
-
-    while(reader < nums.length) {
-        if (nums[reader] == val) {
-            reader++;
-        }
-        else {
-            nums[writer] = nums[reader];
-            reader++;
-            writer++;
-
+public int removeElement(int[] nums, int val) {
+    int k = 0;
+    int n = nums.length;
+    for (int i = 0; i< n; i++) {
+        if (nums[i] != val) {
+            nums[k++] = nums[i];
         }
     }
-    
-    */
-    
-    
-}
-
-class Solution {
-    public boolean isValidSudoku(char[][] board) {
-        Set<String> seen = new HashSet<>();
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                char num = board[i][j];
-                if (num != '.') {
-                    if (!seen.add(num  + "in row " + i) || 
-                        !seen.add(num  + "in col " + j) ||
-                        !seen.add(num  + "in subbox " + i/3 + "-" + j/3)) {
-                            return false;
-                        }
-                }
-            }
-        }
-        return true;
-    }
-   
+    return k;
 }
 
 # Reverse integer
-class Solution {
-    public int reverse(int x) {
-        int remainder;
-        long reversedInt = 0;
-        while (x != 0) {
-            remainder = x % 10;
-            reversedInt = reversedInt * 10 + remainder;
+public int reverse(int x) {
+    int remainder;
+    long reversedInt = 0;
+    while (x != 0) {
+        remainder = x % 10;
+        reversedInt = reversedInt * 10 + remainder;
 
-            x = x / 10;
-        }
-        if (reversedInt < Integer.MIN_VALUE || reversedInt > Integer.MAX_VALUE) {
-            return 0;
-        }
-        else {
-            return (int) reversedInt;
-        }
-        
+        x = x / 10;
+    }
+    if (reversedInt < Integer.MIN_VALUE || reversedInt > Integer.MAX_VALUE) {
+        return 0;
+    }
+    else {
+        return (int) reversedInt;
     }
 }
+
 #Valid Parantheses
+public boolean isValid(String s) {
+    Stack<Character> stack = new Stack<>();
 
-class Solution {
-    public boolean isValid(String s) {
-        Stack<Character> stack = new Stack<>();
-
-        for (char ch: s.toCharArray()) {
-          if (ch == '(' ||ch == '[' || ch == '{') stack.push(ch);
-          else if (stack.isEmpty()) return false;
-          else if (ch == ')' && stack.pop() != '(') return false;
-          else if (ch == ']' && stack.pop() != '[') return false;
-          else if (ch == '}' && stack.pop() != '{') return false;
-          
-        }
-        return stack.isEmpty();
+    for (char ch: s.toCharArray()) {
+      if (ch == '(' ||ch == '[' || ch == '{') stack.push(ch);
+      else if (stack.isEmpty()) return false;
+      else if (ch == ')' && stack.pop() != '(') return false;
+      else if (ch == ']' && stack.pop() != '[') return false;
+      else if (ch == '}' && stack.pop() != '{') return false;
+      
     }
+    return stack.isEmpty();
 }
-
 
 #Add Two Numbers
 public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode sentinel = new ListNode(0);
-        ListNode curr = sentinel;
-        int carry = 0;
-        while (l1 != null || l2 !=null) {
-            int l1_val = l1 != null? l1.val: 0;
-            int l2_val = l2 != null? l2.val : 0;
-            int sum = l1_val + l2_val + carry;
-            carry = sum /10;
-            int last_digit = sum % 10;
-            ListNode new_node = new ListNode(last_digit);
-            curr.next = new_node;
-            
-            
-            
-            if (l1 != null) l1 = l1.next;
-            if (l2 != null) l2 = l2.next;
-            curr = curr.next;
-        }
+    ListNode sentinel = new ListNode(0);
+    ListNode curr = sentinel;
+    int carry = 0;
+    while (l1 != null || l2 !=null) {
+        int l1_val = l1 != null? l1.val: 0;
+        int l2_val = l2 != null? l2.val : 0;
+        int sum = l1_val + l2_val + carry;
+        carry = sum /10;
+        int last_digit = sum % 10;
+        ListNode new_node = new ListNode(last_digit);
+        curr.next = new_node;
         
-        if (carry > 0) {
-            ListNode new_node = new ListNode(1);
-            curr.next = new_node;
-            curr = curr.next;
-        }
         
-        return sentinel.next;
+        
+        if (l1 != null) l1 = l1.next;
+        if (l2 != null) l2 = l2.next;
+        curr = curr.next;
     }
+    
+    if (carry > 0) {
+        ListNode new_node = new ListNode(1);
+        curr.next = new_node;
+        curr = curr.next;
+    }
+    
+    return sentinel.next;
+}
