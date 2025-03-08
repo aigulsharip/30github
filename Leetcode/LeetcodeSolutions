@@ -33,6 +33,18 @@ public boolean searchWord(char [][] board, String word, int i, int j, int count,
     return false;
 }
 
+#Jump Game
+public boolean canJump(int[] nums) {
+        int lastGoodIndex = nums.length -1;
+
+        for (int i = nums.length -1; i >= 0; i--) {
+            if (i + nums[i] >= lastGoodIndex) {
+                lastGoodIndex = i;
+            }
+        }
+        return lastGoodIndex == 0;
+    } 
+
 #Remove Element
 public int removeElement(int[] nums, int val) {
     int k = 0;
