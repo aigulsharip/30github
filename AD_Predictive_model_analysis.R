@@ -296,12 +296,78 @@ print(paste("AUC-ROC (without cognitive scores):", round(auc_value_no_cognitive,
 plot(roc_curve_no_cognitive, col="blue", lwd=2, main="ROC Curve Without Cognitive Scores")
 abline(a=0, b=1, lty=2, col="gray")  
 
+###############################################################################
+### Random Forest for predicting AD status
+##############################################################################
 
+# Install necessary packages if not installed
+install.packages("randomForest")
+install.packages("pROC")  # For AUC-ROC
+install.packages("caret") # For confusion matrix
+library(randomForest)
+library(pROC)
+library(caret)
 
+# Prepare Data
+X_full <- as.matrix(df[, numeric_columns])  # Use all numeric predictors
+y_full <- df$group  # Response variable
 
+# Split into training and test sets
+set.seed(123)
+train_index <- createDataPartition(y_full, p = 0.8, list = FALSE)
+X_train_full <- X_full[train_index, ]
+X_test_full <- X_full[-train_index, ]
+y_train_full <- y_full[train_index]
+y_test_full <- y_full[-train_index]
 
+# Convert to data frame for randomForest
+train_data <- data.frame(X_train_full, group = as.factor(y_train_full))
+test_data <- data.frame(X_test_full, group = as.factor(y_test_full))
 
+# Train Random Forest Model
+set.seed(123)
+rf_model <- randomForest(group ~ ., data = train_data, importance = TRUE, ntree = 500)
 
+# Print model summary
+print(rf_model)
 
+# Feature Importance
+importance_df <- data.frame(Feature = rownames(rf_model$importance), Importance = rf_model$importance[, 1])
+importance_df <- importance_df %>% arrange(desc(Importance))
 
+# Print top important features
+print("Top Predictive Features (Random Forest):")
+print(importance_df[1:20, ])  # Top 20 features
+
+# Visualize Feature Importance
+ggplot(importance_df[1:20, ], aes(x = reorder(Feature, Importance), y = Importance)) +
+  geom_col(fill = "blue") +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Top 20 Feature Importance (Random Forest)",
+       x = "Feature",
+       y = "Importance Score")
+
+# Make Predictions
+rf_predictions <- predict(rf_model, newdata = test_data, type = "prob")[, 2]  # Get probability of AD
+rf_pred_classes <- ifelse(rf_predictions > 0.5, 1, 0)  # Convert to binary
+
+# Confusion Matrix
+conf_matrix_rf <- confusionMatrix(factor(rf_pred_classes), factor(y_test_full))
+precision_rf <- conf_matrix_rf$byClass["Precision"]
+recall_rf <- conf_matrix_rf$byClass["Sensitivity"]
+f1_score_rf <- 2 * ((precision_rf * recall_rf) / (precision_rf + recall_rf))
+
+print(paste("Precision (Random Forest):", round(precision_rf, 3)))
+print(paste("Recall (Sensitivity, Random Forest):", round(recall_rf, 3)))
+print(paste("F1-score (Random Forest):", round(f1_score_rf, 3)))
+
+# AUC-ROC
+roc_curve_rf <- roc(y_test_full, rf_predictions)
+auc_value_rf <- auc(roc_curve_rf)
+print(paste("AUC-ROC (Random Forest):", round(auc_value_rf, 3)))
+
+# Plot ROC Curve
+plot(roc_curve_rf, col="blue", lwd=2, main="ROC Curve (Random Forest)")
+abline(a=0, b=1, lty=2, col="gray")  # Add diagonal line
 
