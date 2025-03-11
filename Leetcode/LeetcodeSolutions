@@ -51,6 +51,26 @@ public boolean inorder (TreeNode root) {
 
 }
 
+#Validate Binary Search Tree: iterative, inorder travelsal 
+public boolean isValidBST(TreeNode root) {
+    Integer prev = null;
+    Stack<TreeNode> stack = new Stack<>();
+    
+    while (!stack.isEmpty() || root != null) {
+        while (root != null) {
+            stack.push(root);
+            root = root.left;
+        }
+
+        root = stack.pop();
+        if (prev != null && root.val <= prev) return false;
+        prev = root.val;
+        root = root.right;
+    }
+    return true;
+
+}
+
 #Longest Common Prefix
 public String longestCommonPrefix(String[] strs) {
     if (strs.length == 0) return "";
